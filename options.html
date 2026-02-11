@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealLink 设置</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+
+    .logo img {
+      width: 64px;
+      height: 64px;
+    }
+
+    .logo h1 {
+      font-size: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .version {
+      color: #999;
+      font-size: 14px;
+    }
+
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .stat-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      color: #666;
+    }
+
+    /* Settings */
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-info h3 {
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    .setting-info p {
+      font-size: 13px;
+      color: #999;
+    }
+
+    /* Toggle Switch */
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 26px;
+    }
+
+    .toggle input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.3s;
+      border-radius: 26px;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle input:checked + .toggle-slider {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .toggle input:checked + .toggle-slider:before {
+      transform: translateX(24px);
+    }
+
+    /* Sites List */
+    .sites-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .site-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .site-status {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #07c160;
+      margin-left: auto;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-danger {
+      background: #ff4d4f;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #ff7875;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 20px;
+      color: #999;
+      font-size: 13px;
+    }
+
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #333;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="icons/icon128.png" alt="RealLink">
+        <h1>RealLink</h1>
+      </div>
+      <div class="version">版本 2.0.0</div>
+    </div>
+
+    <!-- Stats Card -->
+    <div class="card">
+      <div class="card-title">📊 使用统计</div>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="totalLinks">0</div>
+          <div class="stat-label">累计还原链接</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="installDays">0</div>
+          <div class="stat-label">使用天数</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">12</div>
+          <div class="stat-label">支持平台</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Card -->
+    <div class="card">
+      <div class="card-title">⚙️ 设置</div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h3>自动处理</h3>
+          <p>页面加载时自动还原外链</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="autoProcess" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h3>显示通知</h3>
+          <p>处理完成后显示提示</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="showNotifications" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h3>徽章计数</h3>
+          <p>在扩展图标上显示处理数量</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="showBadge" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Supported Sites Card -->
+    <div class="card">
+      <div class="card-title">🌐 支持平台</div>
+      <div class="sites-list">
+        <div class="site-tag">
+          <span>知乎</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>掘金</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>简书</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>CSDN</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>博客园</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>微信公众号</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>Bilibili</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>微博</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>百度贴吧</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>51CTO</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>InfoQ</span>
+          <span class="site-status"></span>
+        </div>
+        <div class="site-tag">
+          <span>开源中国</span>
+          <span class="site-status"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Management Card -->
+    <div class="card">
+      <div class="card-title">🗑️ 数据管理</div>
+      <div class="setting-item">
+        <div class="setting-info">
+          <h3>重置统计数据</h3>
+          <p>清除所有累计统计信息</p>
+        </div>
+        <button class="btn btn-danger" id="resetData">重置</button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Made with ❤️ | <a href="https://github.com" target="_blank">GitHub</a></p>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

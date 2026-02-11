@@ -1,28 +1,79 @@
 {
   "manifest_version": 3,
-  "name": "RealLink",
-  "version": "1.3",
-  "description": "Automatically modify href of anchor tags based on domain-specific rules",
+  "name": "RealLink - 外链还原助手",
+  "version": "2.0.0",
+  "description": "自动还原中文网站的外链跳转拦截，支持知乎、掘金、CSDN、简书、微信、B站、微博等主流平台",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "64": "icons/icon64.png",
+    "128": "icons/icon128.png",
+    "256": "icons/icon256.png"
+  },
   "permissions": [
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.zhihu.com/*",
+    "https://*.juejin.cn/*",
+    "https://*.jianshu.com/*",
+    "https://*.csdn.net/*",
+    "https://*.cnblogs.com/*",
+    "https://*.weibo.com/*",
+    "https://*.weibo.cn/*",
+    "https://*.weixin.qq.com/*",
+    "https://*.bilibili.com/*",
+    "https://tieba.baidu.com/*",
+    "https://*.51cto.com/*",
+    "https://*.infoq.cn/*",
+    "https://*.oschina.net/*"
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    },
+    "default_title": "RealLink - 点击统计已处理的链接"
   },
+  "options_page": "options.html",
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": [
-        "https://*.juejin.cn/*",
         "https://*.zhihu.com/*",
+        "https://*.juejin.cn/*",
+        "https://*.jianshu.com/*",
         "https://*.csdn.net/*",
-        "https://*.jianshu.leichenlong.com/*"
+        "https://*.cnblogs.com/*",
+        "https://*.weibo.com/*",
+        "https://*.weibo.cn/*",
+        "https://*.weixin.qq.com/*",
+        "https://*.bilibili.com/*",
+        "https://tieba.baidu.com/*",
+        "https://*.51cto.com/*",
+        "https://*.infoq.cn/*",
+        "https://*.oschina.net/*"
       ],
       "js": [
         "content.js"
+      ],
+      "run_at": "document_end"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "icons/*.png"
+      ],
+      "matches": [
+        "<all_urls>"
       ]
     }
   ]

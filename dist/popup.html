@@ -1,18 +1,460 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="zh-CN">
 <head>
-  <title>RealLink</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealLink - 外链还原助手</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      width: 360px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 12px;
+      margin: 8px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+    }
+
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      font-size: 12px;
+      color: #666;
+    }
+
+    /* Status Card */
+    .status-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      padding: 20px;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .status-label {
+      font-size: 12px;
+      opacity: 0.9;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .domain-value {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      word-break: break-all;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stats-item {
+      text-align: center;
+    }
+
+    .stats-value {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .stats-label {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-badge.supported {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .status-badge.unsupported {
+      background: rgba(255, 100, 100, 0.8);
+    }
+
+    .status-badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Buttons */
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #666;
+    }
+
+    .btn-secondary:hover {
+      background: #eee;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Supported Sites */
+    .sites-section {
+      margin-bottom: 15px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-title::before {
+      content: "";
+      width: 4px;
+      height: 14px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 2px;
+    }
+
+    .sites-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .site-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px 4px;
+      border-radius: 8px;
+      background: #f8f9fa;
+      transition: all 0.2s ease;
+    }
+
+    .site-item:hover {
+      background: #eee;
+    }
+
+    .site-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 4px;
+    }
+
+    .site-icon.zhihu { background: #0084ff; }
+    .site-icon.juejin { background: #1e80ff; }
+    .site-icon.jianshu { background: #ea6f5a; }
+    .site-icon.csdn { background: #fc5531; }
+    .site-icon.cnblogs { background: #333; }
+    .site-icon.weixin { background: #07c160; }
+    .site-icon.bilibili { background: #00a1d6; }
+    .site-icon.weibo { background: #e6162d; }
+    .site-icon.tieba { background: #38f; }
+    .site-icon.cto51 { background: #c00; }
+    .site-icon.infoq { background: #0068b7; }
+    .site-icon.oschina { background: #21a675; }
+
+    .site-name {
+      font-size: 10px;
+      color: #666;
+      text-align: center;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding-top: 15px;
+      border-top: 1px solid #eee;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: #999;
+    }
+
+    .footer-text a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .footer-text a:hover {
+      text-decoration: underline;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 13px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* Unsupported message */
+    .unsupported-msg {
+      text-align: center;
+      padding: 16px;
+      margin-bottom: 15px;
+      background: #fff8e6;
+      border: 1px solid #ffd591;
+      border-radius: 10px;
+      color: #d48806;
+    }
+
+    .unsupported-msg .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .unsupported-msg .title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #d48806;
+    }
+
+    .unsupported-msg .subtitle {
+      font-size: 12px;
+      color: #ad6800;
+    }
+
+    .unsupported-msg .current-domain {
+      margin-top: 10px;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 6px;
+      font-size: 12px;
+      color: #666;
+      word-break: break-all;
+    }
+
+    /* Hidden */
+    .hidden {
+      display: none !important;
     }
   </style>
 </head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <img src="icons/icon32.png" alt="RealLink" class="logo-icon">
+        <span class="logo-text">RealLink</span>
+      </div>
+      <div class="tagline">一键还原外链，告别跳转拦截</div>
+    </div>
 
-<body style="width:200px">
-  <h3>RealLink - Link Modifier</h3>
-  <p>This extension modifies links based on domain-specific rules.</p>
+    <!-- Status Card -->
+    <div class="status-card" id="statusCard">
+      <div class="status-label">当前网站</div>
+      <div class="domain-value" id="domainLabel">检测中...</div>
+      
+      <div class="stats-row">
+        <div class="stats-item">
+          <div class="stats-value" id="statsCount">0</div>
+          <div class="stats-label">已还原链接</div>
+        </div>
+        <div class="stats-item">
+          <span class="status-badge supported" id="statusBadge">
+            <span id="statusText">支持</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unsupported Message -->
+    <div class="unsupported-msg hidden" id="unsupportedMsg">
+      <div class="icon">😕</div>
+      <div class="title">当前网站暂不支持</div>
+      <div class="subtitle">请访问以下支持的网站</div>
+      <div class="current-domain" id="unsupportedDomain"></div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions" id="actions">
+      <button class="btn btn-primary" id="refreshBtn">
+        <span>🔄</span> 刷新统计
+      </button>
+      <button class="btn btn-secondary" id="resetBtn">
+        <span>🗑️</span> 重置
+      </button>
+    </div>
+
+    <!-- Supported Sites -->
+    <div class="sites-section" id="sitesSection">
+      <div class="section-title">支持平台</div>
+      <div class="sites-grid">
+        <div class="site-item">
+          <div class="site-icon zhihu">知</div>
+          <div class="site-name">知乎</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon juejin">掘</div>
+          <div class="site-name">掘金</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon jianshu">简</div>
+          <div class="site-name">简书</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon csdn">C</div>
+          <div class="site-name">CSDN</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon cnblogs">博</div>
+          <div class="site-name">博客园</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon weixin">微</div>
+          <div class="site-name">微信</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon bilibili">B</div>
+          <div class="site-name">B站</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon weibo">微</div>
+          <div class="site-name">微博</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon tieba">贴</div>
+          <div class="site-name">贴吧</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon cto51">51</div>
+          <div class="site-name">51CTO</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon infoq">Q</div>
+          <div class="site-name">InfoQ</div>
+        </div>
+        <div class="site-item">
+          <div class="site-icon oschina">O</div>
+          <div class="site-name">开源中国</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <div class="footer-text">
+        Made with ❤️ | <a href="https://github.com" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="popup.js"></script>
 </body>
-
 </html>

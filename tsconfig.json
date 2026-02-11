@@ -1,12 +1,26 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "lib": ["dom", "es6"],
-    "module": "es6",
+    "target": "ES2020",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "outDir": "./dist",
+    "lib": ["ES2020", "DOM"],
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "noEmit": false,
+    "declaration": false,
+    "sourceMap": false,
+    "removeComments": true,
+    "types": ["chrome"]
   },
-  "include": ["*.ts"]
+  "include": [
+    "*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
