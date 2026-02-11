@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -237,18 +238,53 @@
       margin-bottom: 4px;
     }
 
-    .site-icon.zhihu { background: #0084ff; }
-    .site-icon.juejin { background: #1e80ff; }
-    .site-icon.jianshu { background: #ea6f5a; }
-    .site-icon.csdn { background: #fc5531; }
-    .site-icon.cnblogs { background: #333; }
-    .site-icon.weixin { background: #07c160; }
-    .site-icon.bilibili { background: #00a1d6; }
-    .site-icon.weibo { background: #e6162d; }
-    .site-icon.tieba { background: #38f; }
-    .site-icon.cto51 { background: #c00; }
-    .site-icon.infoq { background: #0068b7; }
-    .site-icon.oschina { background: #21a675; }
+    .site-icon.zhihu {
+      background: #0084ff;
+    }
+
+    .site-icon.juejin {
+      background: #1e80ff;
+    }
+
+    .site-icon.jianshu {
+      background: #ea6f5a;
+    }
+
+    .site-icon.csdn {
+      background: #fc5531;
+    }
+
+    .site-icon.cnblogs {
+      background: #333;
+    }
+
+    .site-icon.weixin {
+      background: #07c160;
+    }
+
+    .site-icon.bilibili {
+      background: #00a1d6;
+    }
+
+    .site-icon.weibo {
+      background: #e6162d;
+    }
+
+    .site-icon.tieba {
+      background: #38f;
+    }
+
+    .site-icon.cto51 {
+      background: #c00;
+    }
+
+    .site-icon.infoq {
+      background: #0068b7;
+    }
+
+    .site-icon.oschina {
+      background: #21a675;
+    }
 
     .site-name {
       font-size: 10px;
@@ -311,29 +347,37 @@
 
     .unsupported-msg .icon {
       font-size: 28px;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .unsupported-msg .title {
       font-size: 14px;
       font-weight: 600;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       color: #d48806;
     }
 
-    .unsupported-msg .subtitle {
-      font-size: 12px;
-      color: #ad6800;
-    }
-
     .unsupported-msg .current-domain {
-      margin-top: 10px;
-      padding: 8px 12px;
+      padding: 6px 12px;
       background: rgba(255, 255, 255, 0.5);
       border-radius: 6px;
-      font-size: 12px;
-      color: #666;
+      font-size: 13px;
+      color: #888;
       word-break: break-all;
+      font-family: monospace;
+      margin-bottom: 12px;
+    }
+
+    .unsupported-msg .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ffd591, transparent);
+      margin: 12px 0;
+    }
+
+    .unsupported-msg .subtitle {
+      font-size: 11px;
+      color: #ad6800;
+      font-weight: 500;
     }
 
     /* Hidden */
@@ -342,6 +386,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <!-- Header -->
@@ -357,7 +402,7 @@
     <div class="status-card" id="statusCard">
       <div class="status-label">当前网站</div>
       <div class="domain-value" id="domainLabel">检测中...</div>
-      
+
       <div class="stats-row">
         <div class="stats-item">
           <div class="stats-value" id="statsCount">0</div>
@@ -374,9 +419,10 @@
     <!-- Unsupported Message -->
     <div class="unsupported-msg hidden" id="unsupportedMsg">
       <div class="icon">😕</div>
-      <div class="title">当前网站暂不支持</div>
-      <div class="subtitle">请访问以下支持的网站</div>
+      <div class="title">当前网站不支持</div>
       <div class="current-domain" id="unsupportedDomain"></div>
+      <div class="divider"></div>
+      <div class="subtitle">本扩展支持以下平台</div>
     </div>
 
     <!-- Actions -->
@@ -447,7 +493,7 @@
     <!-- Footer -->
     <div class="footer">
       <div class="footer-text">
-        Made with ❤️ | <a href="https://github.com" target="_blank">GitHub</a>
+        Made with ❤️ | <a href="https://github.com/leapx-ai/realLink" target="_blank">GitHub</a>
       </div>
     </div>
   </div>
@@ -457,4 +503,5 @@
 
   <script src="popup.js"></script>
 </body>
+
 </html>
