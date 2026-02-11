@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RealLink - 一键还原外链，告别跳转拦截</title>
+  <meta name="description" content="RealLink 是一个 Chrome 扩展，自动还原中文网站的外链跳转拦截，支持知乎、掘金、CSDN、简书等平台">
+  <meta name="keywords" content="Chrome扩展,外链还原,知乎外链,掘金外链,CSDN外链,跳转拦截">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            primary: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+            }
+          },
+          animation: {
+            'float': 'float 3s ease-in-out infinite',
+            'pulse-slow': 'pulse 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+    }
+    .code-block {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-900 antialiased">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center text-white font-bold text-sm">
+            RL
+          </div>
+          <span class="font-bold text-xl gradient-text">RealLink</span>
+        </div>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#features" class="text-gray-600 hover:text-primary-600 transition-colors">功能</a>
+          <a href="#platforms" class="text-gray-600 hover:text-primary-600 transition-colors">支持平台</a>
+          <a href="#install" class="text-gray-600 hover:text-primary-600 transition-colors">安装</a>
+          <a href="https://github.com/yourusername/realLink" target="_blank" class="text-gray-600 hover:text-primary-600 transition-colors">GitHub</a>
+        </div>
+        <a href="#install" class="gradient-bg text-white px-5 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
+          立即安装
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-50 text-primary-700 text-sm font-medium mb-6">
+            <span class="w-2 h-2 rounded-full bg-primary-500 animate-pulse"></span>
+            支持 12+ 主流中文平台
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight mb-6">
+            一键还原外链
+            <span class="block gradient-text">告别跳转拦截</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
+            RealLink 自动识别并还原知乎、掘金、CSDN 等网站的外链跳转拦截，让你直达目标网站，无需等待。
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="#install" class="gradient-bg text-white px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"/></svg>
+              安装扩展
+            </a>
+            <a href="https://github.com/yourusername/realLink" target="_blank" class="bg-white text-gray-700 border-2 border-gray-200 px-8 py-4 rounded-xl font-semibold text-lg hover:border-gray-300 transition-colors flex items-center justify-center gap-2">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"/></svg>
+              查看源码
+            </a>
+          </div>
+          <div class="mt-8 flex items-center justify-center lg:justify-start gap-6 text-sm text-gray-500">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              免费开源
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              隐私安全
+            </div>
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              无广告
+            </div>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="absolute inset-0 gradient-bg opacity-20 blur-3xl rounded-full"></div>
+          <div class="relative bg-white rounded-2xl shadow-2xl p-6 animate-float">
+            <div class="flex items-center gap-2 mb-4 pb-4 border-b border-gray-100">
+              <div class="w-3 h-3 rounded-full bg-red-400"></div>
+              <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+              <div class="w-3 h-3 rounded-full bg-green-400"></div>
+              <div class="ml-4 text-sm text-gray-400">知乎 - 回答</div>
+            </div>
+            <div class="space-y-3">
+              <div class="text-sm text-gray-600">
+                推荐几个好用的前端工具：
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                <div class="w-2 h-2 rounded-full bg-green-500 mt-2"></div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-green-700 mb-1">转换后 ✅</div>
+                  <a href="#" class="text-blue-600 hover:underline text-sm">https://github.com/vitejs/vite</a>
+                </div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-red-50 rounded-lg opacity-60">
+                <div class="w-2 h-2 rounded-full bg-red-400 mt-2"></div>
+                <div class="flex-1">
+                  <div class="text-sm font-medium text-red-700 mb-1">转换前 ❌</div>
+                  <div class="text-xs text-gray-500 break-all">https://link.zhihu.com/?target=https%3A%2F%2Fgithub.com%2Fvitejs%2Fvite</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4">功能特性</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">简洁高效的链接还原体验，让浏览更顺畅</p>
+      </div>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            ⚡
+          </div>
+          <h3 class="text-xl font-semibold mb-3">自动处理</h3>
+          <p class="text-gray-600">页面加载时自动识别并还原外链，无需手动操作，即装即用。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            🔄
+          </div>
+          <h3 class="text-xl font-semibold mb-3">动态监听</h3>
+          <p class="text-gray-600">使用 MutationObserver 监听页面变化，实时处理异步加载的内容。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            📊
+          </div>
+          <h3 class="text-xl font-semibold mb-3">实时统计</h3>
+          <p class="text-gray-600">点击扩展图标查看已处理的链接数量，支持的平台等信息。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            🛡️
+          </div>
+          <h3 class="text-xl font-semibold mb-3">安全可靠</h3>
+          <p class="text-gray-600">仅处理特定域名，不涉及用户隐私数据，代码完全开源可审计。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            🎯
+          </div>
+          <h3 class="text-xl font-semibold mb-3">多平台支持</h3>
+          <p class="text-gray-600">支持知乎、掘金、CSDN、简书、微信、B站等 12+ 主流平台。</p>
+        </div>
+        <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-shadow">
+          <div class="w-12 h-12 gradient-bg rounded-xl flex items-center justify-center text-white text-xl mb-6">
+            🚀
+          </div>
+          <h3 class="text-xl font-semibold mb-3">性能优化</h3>
+          <p class="text-gray-600">使用 requestAnimationFrame 节流，确保不影响页面性能。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Platforms Section -->
+  <section id="platforms" class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4">支持平台</h2>
+        <p class="text-gray-600">持续更新，覆盖主流中文内容平台</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">知</div>
+          <div class="font-medium">知乎</div>
+          <div class="text-xs text-gray-400 mt-1">zhihu.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-400 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">掘</div>
+          <div class="font-medium">掘金</div>
+          <div class="text-xs text-gray-400 mt-1">juejin.cn</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">C</div>
+          <div class="font-medium">CSDN</div>
+          <div class="text-xs text-gray-400 mt-1">csdn.net</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-red-400 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">简</div>
+          <div class="font-medium">简书</div>
+          <div class="text-xs text-gray-400 mt-1">jianshu.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">博</div>
+          <div class="font-medium">博客园</div>
+          <div class="text-xs text-gray-400 mt-1">cnblogs.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">微</div>
+          <div class="font-medium">微信</div>
+          <div class="text-xs text-gray-400 mt-1">weixin.qq.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-pink-400 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">B</div>
+          <div class="font-medium">Bilibili</div>
+          <div class="text-xs text-gray-400 mt-1">bilibili.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">微</div>
+          <div class="font-medium">微博</div>
+          <div class="text-xs text-gray-400 mt-1">weibo.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">贴</div>
+          <div class="font-medium">贴吧</div>
+          <div class="text-xs text-gray-400 mt-1">tieba.baidu.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">51</div>
+          <div class="font-medium">51CTO</div>
+          <div class="text-xs text-gray-400 mt-1">51cto.com</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-blue-700 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">Q</div>
+          <div class="font-medium">InfoQ</div>
+          <div class="text-xs text-gray-400 mt-1">infoq.cn</div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm text-center hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center text-white font-bold mx-auto mb-3">O</div>
+          <div class="font-medium">开源中国</div>
+          <div class="text-xs text-gray-400 mt-1">oschina.net</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo Section -->
+  <section class="py-20 bg-gray-900 text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">前后对比</h2>
+          <p class="text-gray-400 mb-8">RealLink 自动识别跳转链接，将其替换为可直接访问的原始链接，省去中间的等待和确认步骤。</p>
+          <div class="space-y-4">
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </div>
+              <span class="text-gray-300">无需手动复制链接地址</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </div>
+              <span class="text-gray-300">无需点击"继续访问"按钮</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+              </div>
+              <span class="text-gray-300">无需等待跳转页面加载</span>
+            </div>
+            <div class="flex items-center gap-4">
+              <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+              </div>
+              <span class="text-gray-300">一键直达目标网站</span>
+            </div>
+          </div>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-gray-800 rounded-xl p-6">
+            <div class="text-sm text-gray-400 mb-3">转换前 ❌</div>
+            <code class="block text-sm text-red-300 break-all">
+              https://link.zhihu.com/?target=https%3A%2F%2Fgithub.com%2F...
+            </code>
+          </div>
+          <div class="flex justify-center">
+            <svg class="w-8 h-8 text-primary-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="bg-gray-800 rounded-xl p-6">
+            <div class="text-sm text-gray-400 mb-3">转换后 ✅</div>
+            <code class="block text-sm text-green-300 break-all">
+              https://github.com/vitejs/vite
+            </code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Install Section -->
+  <section id="install" class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4">安装方法</h2>
+        <p class="text-gray-600">两种方式安装，推荐 Chrome 应用商店安装</p>
+      </div>
+      
+      <!-- Chrome Web Store -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <div class="flex items-start gap-6">
+          <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20"><path d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm0 18a8 8 0 110-16 8 8 0 010 16zm-2-9a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold mb-2">方式一：Chrome 应用商店（推荐）</h3>
+            <p class="text-gray-600 mb-4">一键安装，自动更新到最新版本</p>
+            <a href="#" class="inline-flex items-center gap-2 gradient-bg text-white px-6 py-3 rounded-xl font-medium hover:opacity-90 transition-opacity opacity-50 cursor-not-allowed">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 0C4.477 0 0 4.477 0 10s4.477 10 10 10 10-4.477 10-10S15.523 0 10 0zm0 18a8 8 0 110-16 8 8 0 010 16zm-2-9a2 2 0 114 0 2 2 0 01-4 0z"/></svg>
+              即将上架
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Developer Mode -->
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <div class="flex items-start gap-6">
+          <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="flex-1">
+            <h3 class="text-xl font-semibold mb-2">方式二：开发者模式安装</h3>
+            <p class="text-gray-600 mb-4">适合开发者或希望使用最新功能的用户</p>
+            <div class="space-y-3 text-sm">
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full gradient-bg text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                <span class="text-gray-700">下载源码：<code class="bg-gray-100 px-2 py-1 rounded">git clone https://github.com/yourusername/realLink.git</code></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full gradient-bg text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                <span class="text-gray-700">安装依赖并构建：<code class="bg-gray-100 px-2 py-1 rounded">npm install && npm run build</code></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full gradient-bg text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                <span class="text-gray-700">打开 Chrome 扩展管理页：<code class="bg-gray-100 px-2 py-1 rounded">chrome://extensions/</code></span>
+              </div>
+              <div class="flex gap-3">
+                <span class="w-6 h-6 rounded-full gradient-bg text-white flex items-center justify-center flex-shrink-0 text-xs font-bold">4</span>
+                <span class="text-gray-700">开启"开发者模式"，点击"加载已解压的扩展程序"，选择 <code class="bg-gray-100 px-2 py-1 rounded">dist</code> 文件夹</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="py-20 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <h2 class="text-3xl font-bold mb-4">常见问题</h2>
+      </div>
+      <div class="space-y-4">
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">RealLink 是否安全？</h3>
+          <p class="text-gray-600">RealLink 完全开源，代码托管在 GitHub 上，任何人都可以审计。扩展仅处理链接 URL，不收集任何用户数据或浏览历史。</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">支持哪些浏览器？</h3>
+          <p class="text-gray-600">目前支持 Chrome、Edge、Brave 等基于 Chromium 的浏览器。Firefox 版本正在开发中。</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">如何添加对新网站的支持？</h3>
+          <p class="text-gray-600">欢迎提交 Issue 或 Pull Request！请提供网站域名和跳转链接的格式示例，我们会尽快适配。</p>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-sm">
+          <h3 class="font-semibold text-lg mb-2">扩展会影响页面性能吗？</h3>
+          <p class="text-gray-600">不会。RealLink 使用高性能的 MutationObserver API，并做了节流优化，对页面加载和运行几乎没有影响。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-3xl font-bold mb-6">准备好告别跳转拦截了吗？</h2>
+      <p class="text-gray-600 mb-8 text-lg">免费开源，立即安装 RealLink，享受更流畅的浏览体验</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#install" class="gradient-bg text-white px-8 py-4 rounded-xl font-semibold text-lg hover:opacity-90 transition-opacity inline-flex items-center justify-center gap-2">
+          立即安装
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+        </a>
+        <a href="https://github.com/yourusername/realLink" target="_blank" class="bg-white text-gray-700 border-2 border-gray-200 px-8 py-4 rounded-xl font-semibold text-lg hover:border-gray-300 transition-colors inline-flex items-center justify-center gap-2">
+          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z" clip-rule="evenodd"/></svg>
+          GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid md:grid-cols-4 gap-8 mb-8">
+        <div class="col-span-2">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 rounded-lg bg-white flex items-center justify-center text-gray-900 font-bold text-sm">
+              RL
+            </div>
+            <span class="font-bold text-xl">RealLink</span>
+          </div>
+          <p class="text-gray-400 text-sm">
+            一键还原外链，告别跳转拦截。让浏览体验更流畅。
+          </p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4">链接</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#features" class="hover:text-white transition-colors">功能特性</a></li>
+            <li><a href="#platforms" class="hover:text-white transition-colors">支持平台</a></li>
+            <li><a href="#install" class="hover:text-white transition-colors">安装方法</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4">开源</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="https://github.com/yourusername/realLink" target="_blank" class="hover:text-white transition-colors">GitHub</a></li>
+            <li><a href="https://github.com/yourusername/realLink/issues" target="_blank" class="hover:text-white transition-colors">提交 Issue</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">更新日志</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <p class="text-gray-400 text-sm">
+          © 2024 RealLink. Licensed under MIT.
+        </p>
+        <p class="text-gray-500 text-sm flex items-center gap-1">
+          Made with <span class="text-red-500">❤</span> for a better web
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
